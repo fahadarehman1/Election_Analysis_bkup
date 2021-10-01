@@ -1,44 +1,75 @@
-#importing election_results.csv file
-#created a new folder called 'Resources'
-#three columns: Ballot ID, County, and Candidate, no. of rows 369711(excl. header)
-# Task: 1. Total number of votes cast, 2. A complete list of candidates who received votes
- # 3.Total number of votes each candidate received, 4.Percentage of votes each candidate won, 5.The winner of the election based on popular vote
-
-#"r": Open a file to be read.
-#"w": Open a file to write to it. This will overwrite an existing file and create a file if one does not already exist.
-#"x": Open a file for exclusive creation. If the file does not exist, it will not create one.
-#"a": Open a file to append data to an existing file. If a file does not exist, it creates one, if a file has been created the data will be added to the file.
-#"+": Open a file for reading and writing.
+# Add our dependencies.
 import csv
-#The os module allows us to interact with our operating system. Give us access to indirect path 
 import os
-
-# Assign a variable for the file to load and the path.
+# Assign a variable to load a file from a path.
 file_to_load = os.path.join("Resources", "election_results.csv")
+# Assign a variable to save the file to a path.
+file_to_save = os.path.join("analysis", "election_analysis.txt")
+
+# Initialize a total vote counter.
+total_votes = 0
+
+# Creating an empty dictionary
+candidate_votes ={}
+
+# Candidate Options
+candidate_options = []
+
+#Winning Candidate and Winning Count tracker
+winning_candidate =""
+winning_count = 0
+winning_percentage = 0
 
 # Open the election results and read the file.
 with open(file_to_load) as election_data:
-# To do: read and analyze the data here.
     file_reader = csv.reader(election_data)
-        # Print each row in the CSV file.
 
-    #print the header row
+    # Read the header row.
     headers = next(file_reader)
-    print(headers)
 
-#    for row in file_reader:
-#        print(row[0]) # to print the first item from each row)
-#Close the file
-#election_data.close()
+    # Print each row in the CSV file.
+    for row in file_reader:
+        # Add to the total vote count.
+        total_votes += 1
+
+        # Print the candidate name from each row.
+        candidate_name = row[2]
+
+        #If the candidate name doesn't match the candidate list then append
+        if candidate_name not in candidate_options:
+            # Add the candidate name to the candidate list.
+            candidate_options.append(candidate_name)
+
+            # Track Candidate vote counts
+            candidate_votes[candidate_name] = 0
+
+        #Add a vote counter
+        candidate_votes[candidate_name] = candidate_votes[candidate_name] + 1
+# Determine the percentage of votes for each candidate by looping through the counts.
+# 1. Iterate through the candidate list.
+for candidate_name in candidate_votes:
+    # Retrieve vote count of the candidate
+    votes = candidate_votes[candidate_name]
+    #calculate the percentage of votes
+    vote_percentage = (float(votes) / float(total_votes) * 100)
+        # Determine winning vote count and candidate
+    # Determine if the votes is greater than the winning count.
+    if (votes > winning_count) and (vote_percentage > winning_percentage):
+         # If true then set winning_count = votes and winning_percent =
+         # vote_percentage.
+         winning_count = votes
+         winning_percentage = vote_percentage
+         # And, set the winning_candidate equal to the candidate's name.
+         winning_candidate = candidate_name
+    # votes to the terminal.
+    print(f"{candidate_name}: {vote_percentage:.1f}% ({votes:,})\n")
+
+winning_candidate_summary = (
+    f"-------------------------\n"
+    f"Winner: {winning_candidate}\n"
+    f"Winning Vote Count: {winning_count:,}\n"
+    f"Winning Percentage: {winning_percentage:.1f}%\n"
+    f"-------------------------\n")
+print(winning_candidate_summary)
 
 
-#-------------------------WRITING A FILE---------------------------------------#
-# Create a filename variable to a direct or indirect path to the file.
-file_to_save = os.path.join("analysis", "election_analysis.txt")
-# Using the with statement open the file as a text file.
-#with open(file_to_save, "w") as txt_file:
-    # Write some data to the file.
-#    txt_file.write("Counties in the Election\n------------------------\nArapahoe\nDenver\nJefferson")    # use of \n for newline
-
-# Close the file
-#file_to_load.close()
