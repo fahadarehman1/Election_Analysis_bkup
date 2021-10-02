@@ -80,5 +80,18 @@ counties = ["Arapahoe", "Denver", "Jeferson"]
 if "El Paso" not in counties:
     print("El Paso is not in the county list")
 else:
-    print("El Paso is found in the county list")
-    
+    print("El Paso is found in the county list")    
+
+#Logical and Boolean Operators
+x=5
+y=5
+if x == 5 and y ==65:
+    print("True")
+else:
+    print("False")
+counties = ["Arapahoe", "Denver", "Jeferson"]
+if "Arapahoe" in counties and "El Paso" in counties:
+# we can use or here:     if "Arapahoe" in counties or "El Paso" in counties:
+    print("Both are found in county list")
+else:
+    print("One of the items from counties not found in the county list")
